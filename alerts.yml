@@ -1,0 +1,22 @@
+groups:
+  - name: AlertRules
+    rules:
+      # Alerte si l'utilisation de la mémoire dépasse 80%
+      - alert: HighMemoryUsage
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.2
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Memory Usage Detected"
+          description: "La mémoire disponible est inférieure à 20%."
+      
+      # Alerte si l'API ne répond pas
+      - alert: FastAPIInstanceDown
+        expr: up{job="Fast-api"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "FastAPI Instance Down"
+          description: "L'instance FastAPI est inaccessible depuis Prometheus."
